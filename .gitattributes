@@ -1,0 +1,7 @@
+# 所有文本文件用 LF 换行符，且自动转换
+* text=auto eol=lf
+
+# 排除二进制文件（避免破坏）
+*.png binary
+*.jpg binary
+*.jar binary

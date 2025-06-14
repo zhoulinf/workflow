@@ -1,0 +1,46 @@
+{
+  "name": "projects",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "hu": "husky install",
+    "stylelint": "npx stylelint '**/*.[s]css' --fix",
+    "lint": "eslint './**/*.{js,ts,tsx}' --fix",
+    "lint:check": "eslint './**/*.{js,ts,tsx}'",
+    "type:check": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "lint-staged": {
+    "*.{js,vue,jsx,tsx}": [
+      "eslint"
+    ],
+    "*.{scss,css}": [
+      "stylelint"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
+    "eslint": "8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "4.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "stylelint": "^16.17.0",
+    "stylelint-config-standard": "^37.0.0",
+    "stylelint-config-standard-scss": "^14.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

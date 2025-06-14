@@ -1,0 +1,63 @@
+{
+    "editor.formatOnSaveMode": "file",
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.fixAll.stylelint": "explicit"
+    },
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "javascriptreact",
+        "typescriptreact",
+        "vue"
+    ],
+    "stylelint.enable": true,
+    "stylelint.snippet": [
+        "css",
+        "less",
+        "postcss",
+        "vue",
+        "sass"
+    ],
+    "stylelint.validate": [
+        "css",
+        "less",
+        "postcss",
+        "vue",
+        "sass"
+    ],
+    "[scss]": {
+        "editor.defaultFormatter": "stylelint.vscode-stylelint"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "stylelint.vscode-stylelint"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "files.eol": "\n", // 强制使用 LF
+    "files.autoSave": "afterDelay",
+    "editor.formatOnSave": true,
+    "files.associations": {
+        "*.js": "javascript",
+        "*.jsx": "javascriptreact",
+        "*.ts": "typescript",
+        "*.tsx": "typescriptreact",
+        "*.vue": "vue",
+        "*.html": "html"
+    },
+    "cSpell.words": [
+        "stylelint",
+        "zhoulinfeng"
+    ]
+}

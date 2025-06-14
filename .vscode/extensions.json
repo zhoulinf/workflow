@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "mhutchie.git-graph",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "stylelint.vscode-stylelint",
+        "adam-bender.commit-message-editor",
+        "joshbolduc.commitlint",
+    ]
+}
