@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "pnpm --filter @demo/workflow dev",
     "hu": "husky install",
     "stylelint": "npx stylelint '**/*.[s]css' --fix",
     "lint": "eslint './**/*.{js,ts,tsx}' --fix",
