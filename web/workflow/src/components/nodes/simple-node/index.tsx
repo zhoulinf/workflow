@@ -81,7 +81,7 @@ const SimpleNode = (props:SimpleNodeProps) => {
           {Icon || (<div className={styles.icon}>{title.toUpperCase()}</div>) }
           <div>{title}</div>
         </div>
-        {NodeComponent ? <NodeComponent {...props} /> : null}
+        {NodeComponent ? <NodeComponent /> : null}
       </div>
     </BaseNode>
   );
