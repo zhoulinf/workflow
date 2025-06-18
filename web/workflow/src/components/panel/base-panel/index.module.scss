@@ -1,0 +1,22 @@
+.header {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 0.5px solid gray;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.close {
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border-radius: 50%;
+    background-color: #fe7743;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

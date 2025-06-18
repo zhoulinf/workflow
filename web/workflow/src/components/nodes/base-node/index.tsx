@@ -1,7 +1,7 @@
 import { ComponentType, ReactNode, useMemo } from 'react';
 import { Position } from '@xyflow/react';
 import { Dialog } from 'radix-ui';
-import { useWorkflow } from '@/context';
+import { worflowState } from '@/store/workflow.state';
 import { Handle } from '../../handle';
 
 import styles from './index.module.scss';
@@ -20,7 +20,7 @@ const BaseNode = (props:BaseNodeProps) => {
 
   const NodePanel = panelComponents;
 
-  const [workflow] = useWorkflow();
+  const [] = useWorkflow();
   const { currentNodeId, nodes } = workflow;
 
   const currentNode = useMemo(

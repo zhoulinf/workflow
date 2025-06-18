@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { ComponentType, ReactNode, useMemo } from 'react';
 import type { NodeProps, Node } from '@xyflow/react';
-import { EnvelopeClosedIcon } from '@radix-ui/react-icons';
+
 import { BaseNode } from '../base-node';
 import styles from './index.module.scss';
 import { HttpPanel } from './http';
@@ -25,35 +25,6 @@ const Icons: Record<string, ReactNode> = {
 
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const withSimplePanel = (Component: ComponentType): ComponentType => () => {
-  const [{ currentNodeId, nodes }] = useWorkflow();
-  const currentNode = useMemo(
-    () => nodes.find((node) => node.id === currentNodeId),
-    [currentNodeId, nodes],
-  );
-  const title = (currentNode?.data?.title ?? '') as string;
-  return (
-    <>
-      <div className={styles['header-panel']}>
-        <div className={styles['panel-title']}>{title}</div>
-        <div className={styles.close}><EnvelopeClosedIcon /></div>
-      </div>
-      <div>
-        <Component {...currentNode} />
-      </div>
-    </>
-  );
-};
-
-const panelComponents: Record<string, ComponentType> = Object.keys(panelMap).reduce((acc, key) => {
-  const Component = panelMap[key];
-  if (Component) {
-    acc[key] = withSimplePanel(Component);
-  }
-  return acc;
-}, {} as Record<string, ComponentType>);
-
 const SimpleNode = (props:SimpleNodeProps) => {
   const { data, id } = props;
   const {
@@ -71,7 +42,7 @@ const SimpleNode = (props:SimpleNodeProps) => {
 
   return (
     <BaseNode
-      panelComponents={panelComponents}
+      panelComponents={panelMap}
       enableTargetHandle={enableTargetHandle}
       enableSourceHandle={enableSourceHandle}
     >

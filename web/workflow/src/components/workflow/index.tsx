@@ -15,7 +15,7 @@ const nodeTypes = {
   [CUSTOM_SIMPLE_NODE]: SimpleNode,
 };
 
-const WrokFlow = (props:WrokFlowProps) => (
+const WorkFlow = (props:WrokFlowProps) => (
   <div className={styles.root}>
     <ReactFlow
       proOptions={{ hideAttribution: true }}
@@ -28,4 +28,4 @@ const WrokFlow = (props:WrokFlowProps) => (
   </div>
 );
 
-export { WrokFlow };
+export { WorkFlow };
