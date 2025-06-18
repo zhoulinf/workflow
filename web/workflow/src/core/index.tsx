@@ -1,14 +1,20 @@
 import { useSnapshot } from 'valtio';
-import { worflowState } from '@/store/workflow.state';
+import { applyNodeChanges, NodeChange } from '@xyflow/react';
+import { staticWorkFlow } from '@/store/workflow.state';
 import { WorkFlow } from '@/components/workflow';
 
 export const WorkFlowMain = () => {
-  const { staticWorkFlow: { nodes, edges } } = useSnapshot(worflowState);
+  const { nodes, edges } = useSnapshot(staticWorkFlow);
+
+  const handleNodeChange = (changes:NodeChange[]) => {
+    staticWorkFlow.nodes = applyNodeChanges(changes, staticWorkFlow.nodes);
+  };
 
   return (
     <WorkFlow
       nodes={nodes}
       edges={edges}
+      onNodesChange={handleNodeChange}
     />
   );
 };

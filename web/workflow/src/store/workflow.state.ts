@@ -52,6 +52,15 @@ export const currentNode = derive({
     const { metaData } = get(worflowState);
     return metaData.get(currentNodeId);
   },
+  id: (get) => {
+    const { currentNodeId } = get(worflowState).status;
+    return currentNodeId;
+  },
+});
+
+export const staticWorkFlow = derive({
+  nodes: (get) => get(worflowState).staticWorkFlow.nodes,
+  edges: (get) => get(worflowState).staticWorkFlow.edges,
 });
 
 export type{

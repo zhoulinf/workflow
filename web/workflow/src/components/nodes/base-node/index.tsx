@@ -1,7 +1,8 @@
 import { ComponentType, ReactNode, useMemo } from 'react';
 import { Position } from '@xyflow/react';
 import { Dialog } from 'radix-ui';
-import { worflowState } from '@/store/workflow.state';
+import { useSnapshot } from 'valtio';
+import { currentNode } from '@/store/workflow.state';
 import { Handle } from '../../handle';
 
 import styles from './index.module.scss';
@@ -20,15 +21,10 @@ const BaseNode = (props:BaseNodeProps) => {
 
   const NodePanel = panelComponents;
 
-  const [] = useWorkflow();
-  const { currentNodeId, nodes } = workflow;
+  const { data } = useSnapshot(currentNode);
+  const { type } = data || {};
 
-  const currentNode = useMemo(
-    () => nodes.find((node) => node.id === currentNodeId),
-    [currentNodeId, nodes],
-  );
-
-  const panelType = currentNode?.data?.type || '';
+  const panelType = type || '';
 
   const Panel = panelType ? NodePanel?.[panelType as string] : null;
 

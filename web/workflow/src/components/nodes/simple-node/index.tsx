@@ -6,7 +6,7 @@ import type { NodeProps, Node } from '@xyflow/react';
 import { BaseNode } from '../base-node';
 import styles from './index.module.scss';
 import { HttpPanel } from './http';
-import { useWorkflow } from '@/context';
+import { worflowState } from '@/store/workflow.state';
 
 // eslint-disable-next-line no-undef
 type SimpleNodeProps = NodeProps<Node<WorkFlow.NodeData>>;
@@ -31,13 +31,11 @@ const SimpleNode = (props:SimpleNodeProps) => {
     title, type, enableTargetHandle, enableSourceHandle,
   } = data;
 
-  const [, workflowStore] = useWorkflow();
-
   const NodeComponent = nodesMap[type];
   const Icon = Icons[type] || null;
 
   const handleSelect = () => {
-    workflowStore.currentNodeId = id;
+    worflowState.status.currentNodeId = id;
   };
 
   return (

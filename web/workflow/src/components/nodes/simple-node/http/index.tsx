@@ -1,11 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Collapsible } from 'radix-ui';
 import {
   ChevronDownIcon, ChevronUpIcon, PlusCircledIcon, MinusCircledIcon,
 } from '@radix-ui/react-icons';
+import { useSnapshot } from 'valtio';
 import * as Panel from '../../../panel/base-panel';
-import { useWorkflow } from '@/context';
+import { setMetaData } from '@/store/workflow.actions';
+
 import styles from './index.module.scss';
+import { worflowState, currentNode } from '@/store/workflow.state';
 
 interface TogglePanelProps{
   triggerNode: React.ReactNode;
@@ -35,38 +38,26 @@ const TogglePanel = (props:TogglePanelProps) => {
 const OPTIONS = ['POST', 'GET'];
 
 const HttpForm = () => {
-  const [, workflowStore] = useWorkflow();
+  const [formData, setFormData] = useState(currentNode.metaData);
 
-  const [outputList, setOutputList] = useState([]);
-  const { nodes, currentNodeId } = workflowStore;
-  const currentNode = useMemo(
-    () => nodes.find((item) => currentNodeId === item.id),
-    [currentNodeId, nodes],
-  );
-  const handleSubmit = (e:React.MouseEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e:React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const id = worflowState.status.currentNodeId;
+    if (!id) {
+      return;
+    }
     const data = Object.fromEntries(new FormData(e.currentTarget));
-    workflowStore.setNodeData({ FormData: data });
-  };
+    setMetaData(id, data);
+  }, []);
+
   const handleChange:React.FormEventHandler<HTMLFormElement> = (e) => {
     const { value, name } = e.target || {};
-    const oldFormData = currentNode?.data.formData || {};
-    workflowStore.setNodeData({ formData: { ...oldFormData, [name]: value } });
+    if (!currentNode.id) {
+      return;
+    }
+    worflowState.metaData.set(currentNode.id, { ...currentNode.metaData, [name]: value });
   };
 
-  const addOutput = (e) => {
-    e.preventDefault();
-    setOutputList((preOutput) => [...preOutput, [{
-      label: '变量名',
-    }, {
-      label: '变量值',
-    }]]);
-  };
-
-  const removeOutput = (e, i) => {
-    e.preventDefault();
-    setOutputList((preOutput) => preOutput.filter((item, index) => index === i));
-  };
   return (
     <form action="#" onSubmit={handleSubmit} onChange={handleChange}>
       <TogglePanel triggerNode="API">

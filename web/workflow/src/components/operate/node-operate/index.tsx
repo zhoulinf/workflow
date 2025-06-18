@@ -1,7 +1,7 @@
 import { Panel } from '@xyflow/react';
 import { Button, Popover } from '@radix-ui/themes';
 import styles from './index.module.scss';
-import { useWorkflow } from '@/context';
+import { addNode } from '@/store/workflow.actions';
 
 interface Data{
   label: string;
@@ -27,10 +27,8 @@ const NodeTypeList:Data[] = [
 ];
 
 const NodeOperate = () => {
-  const [, workflowStore] = useWorkflow();
-
   const handleSelect = (data:Data) => {
-    workflowStore.addSimpleNode(data);
+    addNode(data);
   };
   return (
     <Panel position="bottom-center" className={styles.root}>
