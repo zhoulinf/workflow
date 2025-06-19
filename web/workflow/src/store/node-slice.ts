@@ -9,7 +9,7 @@ type NodeData = {
 
 export type WorkFlowNode = Node<NodeData>
 
-type WorkFlowNodesStates = {
+export type WorkFlowNodesStates = {
   nodes: WorkFlowNode[],
   setNodes: (nodes:WorkFlowNode[])=>void
   addNodes: (newNode:WorkFlowNode)=>void
