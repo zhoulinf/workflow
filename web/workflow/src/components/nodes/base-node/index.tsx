@@ -1,5 +1,5 @@
 import { ComponentType, ReactNode, useMemo } from 'react';
-import { Position } from '@xyflow/react';
+import { NodeProps, Position } from '@xyflow/react';
 import { Dialog } from 'radix-ui';
 import { useSnapshot } from 'valtio';
 import { currentNode } from '@/store/workflow.state';
@@ -7,16 +7,14 @@ import { Handle } from '../../handle';
 
 import styles from './index.module.scss';
 
-interface BaseNodeProps {
+type BaseNodeProps = NodeProps & {
   children?: ReactNode;
   panelComponents?: Record<string, ComponentType>;
-  enableTargetHandle?: boolean;
-  enableSourceHandle?: boolean;
 }
 
 const BaseNode = (props:BaseNodeProps) => {
   const {
-    children, panelComponents, enableTargetHandle = true, enableSourceHandle = true,
+    children, panelComponents, targetPosition, sourcePosition,
   } = props;
 
   const NodePanel = panelComponents;
@@ -30,8 +28,8 @@ const BaseNode = (props:BaseNodeProps) => {
 
   return (
     <>
-      {enableTargetHandle && <Handle type="target" position={Position.Right} />}
-      {enableSourceHandle && <Handle type="source" position={Position.Left} />}
+      {targetPosition && <Handle type="target" position={targetPosition} />}
+      {sourcePosition && <Handle type="source" position={sourcePosition} />}
       <Dialog.Root>
         <Dialog.Trigger asChild>{children}</Dialog.Trigger>
         <Dialog.Portal>

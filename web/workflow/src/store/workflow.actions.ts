@@ -1,14 +1,21 @@
+import { NodeChange, Position } from '@xyflow/react';
 import { CUSTOM_SIMPLE_NODE } from '@/constant';
-import { worflowState } from './workflow.state';
+import { worflowState, currentNode } from './workflow.state';
+import type { NodeData } from './workflow.state';
 
-export const addNode = (data) => {
-  worflowState.staticWorkFlow.nodes.push({
+import { computePosition } from './utils';
+
+export const getNewNode = (data:NodeData) => {
+  const { preNode } = currentNode;
+  const position = preNode?.position;
+  return {
     id: `http${Date.now()}`,
     type: CUSTOM_SIMPLE_NODE,
     data,
-    position: { x: 250, y: 25 },
-  });
-  console.info(worflowState.staticWorkFlow.nodes);
+    position: computePosition(position),
+    targetPosition: Position.Right,
+    sourcePosition: Position.Left,
+  };
 };
 
 const updateNodeConfig = () => {
@@ -35,7 +42,7 @@ const executeNode = () => {
 
 };
 
-const nodeChange = () => {
+const nodeChange = (changes:NodeChange[]) => {
 
 };
 

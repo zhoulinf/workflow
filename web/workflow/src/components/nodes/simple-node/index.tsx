@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { ComponentType, ReactNode, useMemo } from 'react';
-import type { NodeProps, Node } from '@xyflow/react';
+import type { NodeProps } from '@xyflow/react';
+import { WorkFlowNode, worflowState } from '@/store/workflow.state';
 
 import { BaseNode } from '../base-node';
 import styles from './index.module.scss';
 import { HttpPanel } from './http';
-import { worflowState } from '@/store/workflow.state';
 
 // eslint-disable-next-line no-undef
-type SimpleNodeProps = NodeProps<Node<WorkFlow.NodeData>>;
+type SimpleNodeProps = NodeProps<WorkFlowNode>;
 // 原始组件映射表
 const nodesMap:Record<string, ComponentType> = {
 
@@ -27,9 +27,7 @@ const Icons: Record<string, ReactNode> = {
 
 const SimpleNode = (props:SimpleNodeProps) => {
   const { data, id } = props;
-  const {
-    title, type, enableTargetHandle, enableSourceHandle,
-  } = data;
+  const { title, type } = data;
 
   const NodeComponent = nodesMap[type];
   const Icon = Icons[type] || null;
@@ -41,8 +39,7 @@ const SimpleNode = (props:SimpleNodeProps) => {
   return (
     <BaseNode
       panelComponents={panelMap}
-      enableTargetHandle={enableTargetHandle}
-      enableSourceHandle={enableSourceHandle}
+      {...props}
     >
       <div className={styles.root} onClick={handleSelect}>
         <div className={styles.header}>

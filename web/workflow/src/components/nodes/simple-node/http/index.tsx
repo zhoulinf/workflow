@@ -1,9 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Collapsible } from 'radix-ui';
 import {
   ChevronDownIcon, ChevronUpIcon, PlusCircledIcon, MinusCircledIcon,
 } from '@radix-ui/react-icons';
-import { useSnapshot } from 'valtio';
 import * as Panel from '../../../panel/base-panel';
 import { setMetaData } from '@/store/workflow.actions';
 
@@ -99,13 +98,6 @@ const HttpForm = () => {
 };
 
 const HttpPanel = () => {
-  const [, workflowStore] = useWorkflow();
-  const { nodes, currentNodeId } = workflowStore;
-  const currentNode = useMemo(
-    () => nodes.find((item) => currentNodeId === item.id),
-    [currentNodeId, nodes],
-  );
-
   const data = currentNode?.data;
   const { title } = data || {};
   return (
