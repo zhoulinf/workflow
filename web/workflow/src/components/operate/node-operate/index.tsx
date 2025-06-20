@@ -1,38 +1,29 @@
 import { Panel } from '@xyflow/react';
 import { Button, Popover } from '@radix-ui/themes';
-import { useWorkflow } from '@/context';
 import styles from './index.module.scss';
-import { getNewNode } from '@/store/workflow.actions';
-import { worflowState } from '@/store/workflow.state';
+import type { NodeData } from '@/store/node-slice';
+import { generateSimpleNode } from '@/utils';
+import { useStore } from '@/context';
 
-interface Data{
-  label: string;
-  title: string;
-  type: string;
-}
-const NodeTypeList:Data[] = [
+const NodeTypeList:NodeData[] = [
   {
-    label: 'HTTP',
     title: 'HTTP',
     type: 'http',
   },
   {
-    label: '大模型',
     title: 'llm',
     type: 'llm',
-  },
-  {
-    label: '插件',
-    title: '插件',
-    type: 'plugin',
   },
 ];
 
 const NodeOperate = () => {
-  const context = useWorkflow();
-  const handleSelect = (data:Data) => {
-    const newNode = getNewNode(data);
-    context.changeNodes([...worflowState.staticWorkFlow.nodes, newNode]);
+  const addNodes = useStore((state) => state.addNodes);
+  const nodes = useStore((state) => state.nodes);
+  const handleSelect = (data:NodeData) => {
+    const preNode = nodes[nodes.length - 1];
+    const newNode = generateSimpleNode(data, preNode
+      ? { x: preNode.position.x, y: preNode.position.y } : undefined);
+    addNodes(newNode);
   };
   return (
     <Panel position="bottom-center" className={styles.root}>
@@ -51,7 +42,7 @@ const NodeOperate = () => {
                   className={styles.nodeButton}
                   onClick={() => handleSelect(item)}
                 >
-                  {item.label}
+                  {item.title}
                 </button>
               </li>
             ))}

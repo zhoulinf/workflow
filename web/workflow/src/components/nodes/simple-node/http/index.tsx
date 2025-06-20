@@ -1,112 +1,106 @@
-import React, { useCallback, useState } from 'react';
-import { Collapsible } from 'radix-ui';
-import {
-  ChevronDownIcon, ChevronUpIcon, PlusCircledIcon, MinusCircledIcon,
-} from '@radix-ui/react-icons';
+/* eslint-disable no-restricted-syntax */
+import React, {
+  useCallback, useEffect, useState,
+} from 'react';
+import { Form } from 'radix-ui';
+import { PlayIcon } from '@radix-ui/react-icons';
 import * as Panel from '../../../panel/base-panel';
-import { setMetaData } from '@/store/workflow.actions';
+import { Select } from '@/ui/select';
+import { useStore, useWorkflowStore } from '@/context';
+import { WorkFlowNode } from '@/store/node-slice';
 
 import styles from './index.module.scss';
-import { worflowState, currentNode } from '@/store/workflow.state';
 
-interface TogglePanelProps{
-  triggerNode: React.ReactNode;
-  children: React.ReactNode
+type HttpFormProps = WorkFlowNode
+
+const METHODS = ['POST', 'GET'];
+
+type FormData = {
+  method:string;
+  url:string;
+  body:string;
 }
-const TogglePanel = (props:TogglePanelProps) => {
-  const { triggerNode, children } = props;
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Collapsible.Root open={open} onOpenChange={setOpen}>
-        <Collapsible.Trigger asChild>
-          <span className={styles.toggle}>
-            {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
-            {triggerNode}
-          </span>
-        </Collapsible.Trigger>
-        <Collapsible.Content className={styles['toggle-content']}>
-          {children}
-        </Collapsible.Content>
-      </Collapsible.Root>
-      <div className={styles.line} />
-    </>
-  );
-};
 
-const OPTIONS = ['POST', 'GET'];
+const HttpForm = (props:HttpFormProps) => {
+  const { id } = props;
+  const [formData, setFormData] = useState<FormData>({} as FormData);
+  const store = useWorkflowStore().getState();
 
-const HttpForm = () => {
-  const [formData, setFormData] = useState(currentNode.metaData);
+  const setMetaData = useStore((state) => state.setMetaData);
 
   const handleSubmit = useCallback((e:React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const id = worflowState.status.currentNodeId;
-    if (!id) {
-      return;
-    }
     const data = Object.fromEntries(new FormData(e.currentTarget));
     setMetaData(id, data);
-  }, []);
+  }, [id, setMetaData]);
 
-  const handleChange:React.FormEventHandler<HTMLFormElement> = (e) => {
-    const { value, name } = e.target || {};
-    if (!currentNode.id) {
+  const handleChange = (value:string, name:string) => {
+    setFormData((state) => ({ ...state, [name]: value }));
+    const currentMetaData = store.metaData.get(id);
+    if (!currentMetaData) {
+      setMetaData(id, { [name]: value });
       return;
     }
-    worflowState.metaData.set(currentNode.id, { ...currentNode.metaData, [name]: value });
+    setMetaData(id, { ...currentMetaData, [name]: value });
   };
 
-  return (
-    <form action="#" onSubmit={handleSubmit} onChange={handleChange}>
-      <TogglePanel triggerNode="API">
-        <>
-          <select name="method" id="method">
-            {OPTIONS.map((option) => <option value={option}>{option}</option>)}
-          </select>
-          <input type="text" name="url" />
-        </>
-      </TogglePanel>
-      <TogglePanel triggerNode="请求参数（默认json）">
-        <textarea name="params" />
-      </TogglePanel>
+  useEffect(() => {
+    const currentMetaData = store.metaData.get(id);
+    if (currentMetaData) {
+      setFormData(currentMetaData as FormData);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      <TogglePanel triggerNode={(
-        <>
-          <span>输出</span>
-          <PlusCircledIcon onClick={addOutput} />
-        </>
-      )}
-      >
-        {outputList.map((output) => (
-          <div className={styles.inline}>
-            {output.map((item, index) => (
-              <div>
-                <label htmlFor="">{item.label}</label>
-                <div className="flex">
-                  <input type="text" />
-                  <MinusCircledIcon onClick={(e) => { removeOutput(e, index); }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        ))}
-      </TogglePanel>
-      <button type="submit">提交</button>
-    </form>
+  return (
+    <Form.Root action="#" onSubmit={handleSubmit}>
+      <Form.Field name="method">
+        <Form.Label>Method</Form.Label>
+        <Select
+          onValueChange={(value) => handleChange(value, 'method')}
+          value={formData.method}
+          options={METHODS.map((method) => ({ value: method, label: method }))}
+          name="method"
+        />
+      </Form.Field>
+      <Form.Field name="url">
+        <Form.Label>URL</Form.Label>
+        <input
+          value={formData.url}
+          onChange={(e) => handleChange(e.target.value, 'url')}
+          name="url"
+        />
+      </Form.Field>
+      <Form.Field name="body">
+        <Form.Label>Body</Form.Label>
+        <textarea
+          value={formData.body}
+          onChange={(e) => handleChange(e.target.value, 'body')}
+          name="body"
+        />
+      </Form.Field>
+    </Form.Root>
   );
 };
 
 const HttpPanel = () => {
-  const data = currentNode?.data;
-  const { title } = data || {};
+  const currentNode = useStore((state) => state.currentOperateNode);
+  if (!currentNode) {
+    return null;
+  }
+  const { title = '' } = currentNode.data || {};
   return (
     <Panel.Root>
       <Panel.Header>
         <span>{title}</span>
+        <span className={styles.head}><PlayIcon className={styles.icon} /></span>
       </Panel.Header>
       <Panel.Content className={styles.content}>
-        <HttpForm />
+        <HttpForm {...currentNode} />
+        <div>
+          <h3>执行结果</h3>
+          <div />
+        </div>
       </Panel.Content>
     </Panel.Root>
   );

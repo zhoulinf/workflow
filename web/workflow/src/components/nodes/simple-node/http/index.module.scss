@@ -1,33 +1,32 @@
 .content{
 	overflow: auto;
-}
-.toggle{
 	padding: 12px;
-	padding-bottom: 0px;
-	line-height: 28px;
+
+	textarea{
+		line-height: unset;
+		min-height: 80px;
+	}
+}
+
+.head{
+	flex: 1;
 	display: flex;
-	gap: 4px;
+	justify-content: flex-end;
+	margin-right: 12px;
 	align-items: center;
-	cursor: pointer;
-	user-select: none;
-	&-content{
-		padding: 0 12px;
-	}
 }
 
 
-.line{
-	height: 1px;
-	width: 100%;
-	margin-top: 12px;
-	background-color: lightgray;
+.icon{
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border-radius: 50%;
+    background-color: #fe7743;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
-.inline{
-	display: flex;
-	gap: 12px;
-	font-size: 10px;
-	div{
-		flex: 100%;
-	}
-}
